@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <script src="https://cdn.gokwik.com/sdk.js" async></script>
+
+    <style>
+      .hero-bg {
+        background-image: url(https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-hero.png?v=1744871766);
+        width: 100vw;
+        height: 100vh;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      #hero-section {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .shop-button-content h1,
+      .shop-button-content h2 {
+        background: linear-gradient(
+          90deg,
+          rgba(249, 192, 149, 1) 31%,
+          rgba(255, 218, 185, 1) 80%,
+          rgba(255, 218, 185, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        margin: 0;
+      }
+      .shop-button-content p {
+        font-size: 25px;
+        color: white;
+      }
+
+      .shop-button-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+      }
+
+      .shop-button-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+      }
+
+      .shop-button-content button {
+        background: linear-gradient(
+          120deg,
+          rgba(249, 192, 149, 0.8),
+          rgba(255, 218, 185, 0.8)
+        );
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .shop-button-content button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .shop-button-content {
+        position: absolute;
+        bottom: 25px;
+        left: 25px;
+      }
+
+      .head {
+        font-size: xx-large;
+        width: 100px;
+        display: flex;
+        flex-direction: column;
+      }
+      #access {
+        height: 150vh;
+        background: rgb(255, 218, 185);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 218, 185, 1) 8%,
+          rgba(255, 255, 255, 1) 100%
+        );
+      }
+      #access img {
+        width: 300px;
+        justify-content: center;
+        display: flex;
+        margin: auto;
+        padding-top: 30px;
+      }
+
+      /* Card styles and variables */
+      :root {
+        --cover-timing: 0.5s;
+        --cover-ease: cubic-bezier(0.66, 0.08, 0.19, 0.97);
+        --cover-stagger: 0.15s;
+        --text-timing: 0.75s;
+        --text-stagger: 0.015s;
+        --text-ease: cubic-bezier(0.38, 0.26, 0.05, 1.07);
+        --title-stagger: 0.05s;
+        --highlight: white;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2em;
+        justify-content: center;
+        padding: 2em;
+        display: flex;
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 9/12;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+        box-shadow: rgba(255, 255, 255, 0.3) 0 5vw 6vw -8vw,
+          rgba(255, 255, 255, 0) 0 4.5vw 5vw -6vw,
+          rgba(50, 50, 80, 0.5) 0px 4vw 8vw -2vw,
+          rgba(0, 0, 0, 0.8) 0px 4vw 5vw -3vw;
+        transition: box-shadow 1s var(--cover-ease);
+        width: 90vw;
+        max-width: 300px;
+      }
+      @media screen and (min-width: 600px) {
+        .card {
+          width: 40vw;
+        }
+      }
+      .card > * {
+        z-index: 2;
+      }
+      .card > img {
+        z-index: 0;
+        transition: all 0.8s cubic-bezier(0.66, 0.08, 0.19, 0.97);
+      }
+      .card::before,
+      .card::after {
+        content: "";
+        width: 100%;
+        height: 50%;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        transform-origin: left;
+        transform: scaleX(0);
+        transition: all var(--cover-timing) var(--cover-ease);
+        z-index: 1;
+      }
+      .card::after {
+        transition-delay: var(--cover-stagger);
+        top: 50%;
+      }
+      .card:hover,
+      .card:focus {
+        box-shadow: white 0 5vw 6vw -9vw, var(--highlight) 0 5.5vw 5vw -7.5vw,
+          rgba(50, 50, 80, 0.5) 0px 4vw 8vw -2vw,
+          rgba(0, 0, 0, 0.8) 0px 4vw 5vw -3vw;
+      }
+      .card:hover::before,
+      .card:hover::after,
+      .card:focus::before,
+      .card:focus::after {
+        transform: scaleX(1);
+      }
+      .card:hover h2 .char,
+      .card:hover p .word,
+      .card:focus h2 .char,
+      .card:focus p .word {
+        opacity: 1;
+        transform: translateY(0);
+        color: inherit;
+      }
+      .card:hover h2 .char,
+      .card:focus h2 .char {
+        transition-delay: calc(0.1s + var(--char-index) * var(--title-stagger));
+      }
+      .card:hover p .word,
+      .card:focus p .word {
+        transition-delay: calc(0.1s + var(--word-index) * var(--text-stagger));
+      }
+      .card:hover img,
+      .card:focus img {
+        transform: scale(1.1);
+      }
+      .card:nth-of-type(1) {
+        --highlight: coral;
+      }
+      .card:nth-of-type(2) {
+        --highlight: #56ffe5;
+      }
+
+      .text {
+        position: absolute;
+        inset: 20px;
+        top: auto;
+        color: white;
+      }
+
+      h2 {
+        font-size: clamp(20px, 4vw, 40px);
+        font-weight: 800;
+        margin-bottom: 0.2em;
+      }
+
+      p {
+        font-size: clamp(10px, 1.25vw, 14px);
+        line-height: 1.4;
+        text-align: justify;
+        margin-top: 0.2em;
+        margin-bottom: 0;
+      }
+
+      h2 .char,
+      p .word {
+        color: var(--highlight);
+        display: inline-block;
+        opacity: 0;
+        position: relative;
+        transform: translateY(20px);
+        transition-property: transform, opacity, color;
+        transition-timing-function: var(--text-ease);
+        transition-duration: var(--text-timing), var(--text-timing),
+          calc(var(--text-timing) * 2);
+      }
+
+      img {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 7px;
+      }
+      #main {
+        display: flex;
+        gap: 50px;
+        margin-top: -30px;
+      }
+      #main > div:nth-child(2) {
+        position: relative;
+        top: 130px;
+      }
+      #strength h1 {
+        display: flex;
+        justify-content: center;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: xx-large;
+      }
+      #battery h1 {
+        display: flex;
+        justify-content: center;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        width: 600px;
+        margin: auto;
+        margin-bottom: 40px;
+        text-align: center;
+        font-size: xx-large;
+      }
+      #battery {
+        margin-top: 50px;
+      }
+      .battery-img img {
+        width: 1200px;
+        margin: auto;
+        display: flex;
+      }
+      #waterproof h1 {
+        display: flex;
+        justify-content: center;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding-top: 50px;
+        font-size: xx-large;
+      }
+      .water-img img {
+        margin: auto;
+      }
+      #dimensions {
+        margin-top: 30px;
+      }
+      #dimensions h1 {
+        display: flex;
+        justify-content: center;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: xx-large;
+      }
+      .specs-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        background: rgb(255, 217, 189);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 217, 189, 1) 0%,
+          rgba(255, 255, 255, 1) 40%,
+          rgba(252, 183, 131, 1) 100%
+        );
+      }
+      .specs-container h2 {
+        text-align: center;
+        background: rgb(255, 217, 189);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 217, 189, 1) 0%,
+          rgba(255, 255, 255, 1) 40%,
+          rgba(252, 183, 131, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: xx-large;
+      }
+      .specs-container h1 {
+        text-align: center;
+        background: rgb(255, 217, 189);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 217, 189, 1) 0%,
+          rgba(255, 255, 255, 1) 40%,
+          rgba(252, 183, 131, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: xx-large;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+        color: #999;
+        margin-bottom: 1rem;
+      }
+
+      /* -------- Lock Specification Section -------- */
+      .lock-specs {
+        margin-top: 1.5rem;
+      }
+
+      .lock-specs h3 {
+        background: rgb(255, 217, 189);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 217, 189, 1) 0%,
+          rgba(255, 255, 255, 1) 40%,
+          rgba(252, 183, 131, 1) 100%
+        );
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 0.75rem 1rem;
+        font-size: 1.1rem;
+        color: #333;
+        border-radius: 4px;
+      }
+
+      .spec-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+      }
+
+      .details-section {
+        flex: 1 1 135px;
+      }
+
+      .details-section h4 {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        color: #555;
+        text-transform: uppercase;
+      }
+
+      .details-list,
+      .box-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .details-list li {
+        margin: 0.25rem 0;
+        line-height: 1.4;
+      }
+
+      .details-list li strong {
+        font-weight: 600;
+      }
+
+      /* Weight & Dimensions */
+      .weight-dimensions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid #ddd;
+      }
+
+      .weight,
+      .dimensions {
+        flex: 1 1 0px;
+        font-size: 0.95rem;
+        padding: 0.25rem 0;
+      }
+
+      /* -------- Box Contains Section -------- */
+      .box-container {
+        margin-top: 1.5rem;
+      }
+
+      .box-container h4 {
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        color: #000000;
+        text-transform: uppercase;
+        font-weight: 1000;
+      }
+
+      .box-list li {
+        margin: 0.25rem 0;
+        line-height: 1.4;
+      }
+      .box-list {
+        display: flex;
+        gap: 10px;
+        font-weight: bold;
+      }
+      /* -------- Responsive Design (Optional) -------- */
+      @media (max-width: 600px) {
+        .spec-details {
+          flex-direction: column;
+        }
+        .weight-dimensions {
+          flex-direction: column;
+        }
+      }
+      #parent-specs {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+      #testimonials {
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      #testimonials h2 {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+        color: #000000;
+      }
+
+      .testimonial-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 30px;
+        justify-content: flex-start;
+        padding: 10px 0;
+        scrollbar-width: none;
+        margin-bottom: 20px;
+      }
+
+      .testimonial-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .testimonial-card {
+        flex: 0 0 auto;
+        width: 45%; /* Show two cards per view */
+        max-width: 400px;
+        height: 350px;
+        background: linear-gradient(
+          180deg,
+          rgba(12, 12, 12, 1) 5%,
+          rgba(52, 49, 49, 1) 36%,
+          rgba(255, 218, 185, 1) 75%,
+          rgba(255, 218, 185, 1) 100%
+        );
+        padding: 24px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .testimonial-card p {
+        font-size: 15px;
+        color: #ffffff;
+        margin-bottom: 15px;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-info img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .user-info span {
+        font-weight: 600;
+        font-size: 14px;
+        color: #ffffff;
+      }
+
+      .testimonial-buttons {
+        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 50px;
+      }
+
+      .testimonial-buttons button {
+        background: linear-gradient(90deg, #ffdf8c, #fff7d5);
+        border: none;
+        padding: 12px 18px;
+        border-radius: 50px;
+        font-size: 16px;
+        color: #000000;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(255, 223, 140, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .testimonial-buttons button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 15px rgba(255, 223, 140, 0.7);
+      }
+      .stars {
+        color: rgb(212, 212, 71);
+      }
+      .faq-container-001 {
+        margin: auto;
+        width: 700px;
+        margin-bottom: 100px;
+        padding-top: 50px;
+        color: white !important;
+        text-align: left;
+      }
+      .faq-container-001 h2 {
+        font-size: 3rem;
+      }
+
+      .faq-accordion-001 button span[class^="faq-title-"] {
+        font-size: 2rem;
+        /* Adjust the size as needed */
+      }
+
+      /* Accordion styling */
+      .faq-accordion-001 .faq-accordion-item-001,
+      .faq-accordion-001 .faq-accordion-item-002,
+      .faq-accordion-001 .faq-accordion-item-003,
+      .faq-accordion-001 .faq-accordion-item-004,
+      .faq-accordion-001 .faq-accordion-item-005 {
+        border-bottom: 1px solid #e5e5e5;
+        width: 800px;
+      }
+
+      .faq-accordion-001 .faq-accordion-item-001 button[aria-expanded="true"],
+      .faq-accordion-001 .faq-accordion-item-002 button[aria-expanded="true"],
+      .faq-accordion-001 .faq-accordion-item-003 button[aria-expanded="true"],
+      .faq-accordion-001 .faq-accordion-item-004 button[aria-expanded="true"],
+      .faq-accordion-001 .faq-accordion-item-005 button[aria-expanded="true"] {
+        border-bottom: 1px solid #03b5d2;
+      }
+
+      .faq-accordion-001 button {
+        position: relative;
+        display: block;
+        text-align: left;
+        width: 100%;
+        padding: 1em 0;
+        color: #ffffff;
+        font-size: 1.15rem;
+        font-weight: 400;
+        border: none;
+        background: none;
+        outline: none;
+      }
+
+      .faq-accordion-001 button:hover,
+      .faq-accordion-001 button:focus {
+        cursor: pointer;
+        color: #03b5d2;
+      }
+
+      .faq-accordion-001 button .faq-title-001,
+      .faq-accordion-001 button .faq-title-002,
+      .faq-accordion-001 button .faq-title-003,
+      .faq-accordion-001 button .faq-title-004,
+      .faq-accordion-001 button .faq-title-005 {
+        padding: 1em 1.5em 1em 0;
+      }
+
+      .faq-accordion-001 button .faq-icon-001,
+      .faq-accordion-001 button .faq-icon-002,
+      .faq-accordion-001 button .faq-icon-003,
+      .faq-accordion-001 button .faq-icon-004,
+      .faq-accordion-001 button .faq-icon-005 {
+        display: inline-block;
+        position: absolute;
+        top: 18px;
+        right: 0;
+        width: 22px;
+        height: 22px;
+        border: 1px solid;
+        border-radius: 50%;
+      }
+
+      .faq-accordion-001 button .faq-icon-001::before,
+      .faq-accordion-001 button .faq-icon-002::before,
+      .faq-accordion-001 button .faq-icon-003::before,
+      .faq-accordion-001 button .faq-icon-004::before,
+      .faq-accordion-001 button .faq-icon-005::before {
+        position: absolute;
+        content: "";
+        top: 9px;
+        left: 5px;
+        width: 10px;
+        height: 2px;
+        background: currentColor;
+      }
+
+      .faq-accordion-001 button .faq-icon-001::after,
+      .faq-accordion-001 button .faq-icon-002::after,
+      .faq-accordion-001 button .faq-icon-003::after,
+      .faq-accordion-001 button .faq-icon-004::after,
+      .faq-accordion-001 button .faq-icon-005::after {
+        position: absolute;
+        content: "";
+        top: 5px;
+        left: 9px;
+        width: 2px;
+        height: 10px;
+        background: currentColor;
+      }
+
+      .faq-accordion-001 button[aria-expanded="true"] {
+        color: #03b5d2;
+      }
+
+      .faq-accordion-001 button[aria-expanded="true"] .faq-icon-001::after,
+      .faq-accordion-001 button[aria-expanded="true"] .faq-icon-002::after,
+      .faq-accordion-001 button[aria-expanded="true"] .faq-icon-003::after,
+      .faq-accordion-001 button[aria-expanded="true"] .faq-icon-004::after,
+      .faq-accordion-001 button[aria-expanded="true"] .faq-icon-005::after {
+        width: 0;
+      }
+
+      .faq-accordion-001 button[aria-expanded="true"] + .faq-content-001,
+      .faq-accordion-001 button[aria-expanded="true"] + .faq-content-002,
+      .faq-accordion-001 button[aria-expanded="true"] + .faq-content-003,
+      .faq-accordion-001 button[aria-expanded="true"] + .faq-content-004,
+      .faq-accordion-001 button[aria-expanded="true"] + .faq-content-005 {
+        opacity: 1;
+        max-height: 9em;
+        transition: all 200ms linear;
+        color: white !important;
+      }
+
+      .faq-accordion-001 .faq-content-001,
+      .faq-accordion-001 .faq-content-002,
+      .faq-accordion-001 .faq-content-003,
+      .faq-accordion-001 .faq-content-004,
+      .faq-accordion-001 .faq-content-005 {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 200ms linear, max-height 200ms linear;
+        color: white !important;
+      }
+
+      .faq-accordion-001 .faq-content-001 p,
+      .faq-accordion-001 .faq-content-002 p,
+      .faq-accordion-001 .faq-content-003 p,
+      .faq-accordion-001 .faq-content-004 p,
+      .faq-accordion-001 .faq-content-005 p {
+        font-size: 1rem;
+        font-weight: 300;
+        margin: 2em 0;
+        color: white !important;
+      }
+      #parent-faq {
+        width: 100vw;
+        height: 100vh;
+        background: rgb(255, 231, 153);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 231, 153, 1) 0%,
+          rgba(0, 0, 0, 1) 72%,
+          rgba(255, 253, 242, 1) 100%
+        );
+      }
+      #applications h1 {
+        display: flex;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 107, 255, 1) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        /* For better cross-browser support */
+        background-clip: text;
+        color: transparent;
+        justify-content: center;
+        font-size: xx-large;
+      }
+      .container {
+        display: flex;
+        background: rgb(12, 12, 12);
+        background: linear-gradient(
+          180deg,
+          rgba(12, 12, 12, 1) 5%,
+          rgba(52, 49, 49, 1) 31%,
+          rgba(255, 218, 185, 1) 80%,
+          rgba(255, 255, 255, 1) 100%
+        );
+        height: 120vh;
+        width: 100vw;
+        border-radius: 40px;
+        margin: auto;
+        gap: 20px;
+        padding-left: 40px;
+      }
+      .images-container {
+        margin-top: 50px;
+        display: flex;
+        margin: auto;
+        gap: 20px;
+      }
+      .images-container img {
+        will-change: transform;
+        transition: transform 0.3s ease-out;
+      }
+      .image1 img {
+        width: 300px;
+        height: 410px;
+      }
+      .image2 img {
+        width: 300px;
+        height: 410px;
+      }
+      .image3 img {
+        width: 300px;
+        height: 410px;
+      }
+      .battery-img-mobile {
+        display: none;
+      }
+      .lp45-waterproof-mobile {
+        display: none;
+      }
+      .lp45-dimension-mobile {
+        display: none;
+      }
+
+      /* For devices around 425px wide */
+      @media screen and (max-width: 430px) {
+        /* Use the same adjustments from the 320px media query */
+        .hero-bg {
+          background-size: contain;
+          background-image: url(https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-mobile-hero.png?v=1744871765);
+        }
+        .shop-button-content {
+          bottom: 48px;
+          left: 10px;
+          text-align: center;
+        }
+        .shop-button-content h1 {
+          font-size: 1rem;
+          text-align: left;
+        }
+        .shop-button-content h2 {
+          font-size: 1rem;
+        }
+        .shop-button-content p {
+          font-size: 18px;
+        }
+        .shop-button-content button {
+          padding: 8px 16px;
+          font-size: 10px;
+        }
+
+        .card {
+          width: 90vw;
+          max-width: 90%;
+        }
+        #main > div:nth-child(2) {
+          top: 0;
+        }
+        #main {
+          display: flex;
+          gap: 50px;
+          margin-top: -30px;
+          flex-direction: column;
+        }
+        #access img {
+          justify-content: center;
+          display: flex;
+          margin: auto;
+          padding-top: 30px;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+        h2 {
+          font-size: 1rem;
+        }
+        p {
+          font-size: 0.9rem;
+          line-height: 1.3;
+        }
+        .main {
+          display: flex;
+          flex-direction: column;
+        }
+
+        #access {
+          height: auto;
+        }
+        .images-container {
+          display: flex;
+          flex-direction: column;
+          margin: auto;
+          justify-content: center;
+        }
+        .card {
+          width: 300px;
+        }
+        .cards {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .testimonial-card {
+          width: 90vw;
+          padding: 16px;
+        }
+        .container,
+        .images-container img {
+          width: 100%;
+          height: auto;
+        }
+        .strength-img {
+          justify-content: center;
+          margin-left: 10px;
+        }
+        #strength h1 {
+          display: flex;
+          text-align: center;
+          font-size: 70%;
+        }
+        #battery h1 {
+          font-size: 15px;
+          width: 300px;
+          text-align: center;
+        }
+        .battery-img,
+        .water-img,
+        .dimensions-img {
+          display: none;
+        }
+        #dimensions h1 {
+          text-align: center;
+        }
+        .battery-img-mobile {
+          display: flex;
+        }
+      }
+
+      @media screen and (min-width: 760px) and (max-width: 850px) {
+        .shop-button-content h1 {
+          font-size: 2rem;
+        }
+        .shop-button-content h2 {
+          font-size: 15px;
+        }
+        .battery-img {
+          display: none;
+        }
+        .battery-img-mobile {
+          display: flex;
+          justify-content: center;
+          margin: auto;
+        }
+        .water-img {
+          display: none;
+        }
+        .dimensions-img {
+          display: none;
+        }
+        #main {
+          display: flex;
+          flex-direction: column;
+        }
+        #access {
+          height: 250vh;
+        }
+
+        /* Adjust the card container to display cards in a row */
+        .cards {
+          display: grid;
+          gap: 2em;
+          justify-content: center;
+          padding: 2em;
+          margin: auto;
+          justify-content: center;
+        }
+
+        /* Increase width of the card for larger screens */
+        .card {
+          width: 95%;
+          max-width: 350px;
+        }
+
+        /* Adjust typography */
+        h1 {
+          font-size: 2.2rem;
+        }
+        h2 {
+          font-size: 1.5rem;
+        }
+        p {
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+
+        /* You might also want to adjust spacing/margins in other sections */
+        #access {
+          padding: 3em 0;
+          height: 130vh;
+        }
+
+        /* Additional adjustments for layout images or containers */
+        .images-container img {
+          width: 80%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- hero section -->
+    <div id="hero-section">
+      <div class="hero-bg">
+        <div class="shop-button-content">
+          <h1>LP45</h1>
+          <h2>Heavy‑Duty Protection</h2>
+          <p>MRP 2890</p>
+
+          <!-- 1) Quantity selector -->
+          <div class="quantity-controls">
+            <button type="button" id="decrease">‑</button>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              min="1"
+              value="1"
+            />
+            <button type="button" id="increase">+</button>
+          </div>
+
+          <!-- 2) Hidden Shopify “Add to Cart” form (kept inline in case you want it) -->
+          <form
+            method="post"
+            action="/cart/add"
+            class="add-to-cart-form"
+            style="display: none"
+          >
+            <input type="hidden" name="id" value="{{ variant.id }}" />
+            <input type="hidden" name="quantity" id="shopify-quantity" />
+          </form>
+
+          <!-- 3) Your Shop Now / Buy Now button -->
+          <button type="button" id="custom-buy-now">SHOP NOW</button>
+        </div>
+      </div>
+    </div>
+    <!--cards  -->
+    <div id="access">
+      <div class="two-way">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/3way.png?v=1744871765"
+          alt="Access Ways"
+        />
+      </div>
+      <div class="cards">
+        <!-- Card Split Hovers inserted here -->
+        <main id="main">
+          <div class="card" tabindex="0">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp-45-finger.png?v=1744871766"
+            />
+            <div class="text">
+              <h2 data-splitting="">fingerprint-access</h2>
+              <p data-splitting="">
+                Store up to 20 fingerprints for seamless access by multiple
+                users.
+              </p>
+            </div>
+          </div>
+          <div class="card" tabindex="0">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/manual-key.png?v=1744871767"
+              alt="A Beach view"
+            />
+            <div class="text">
+              <h2 data-splitting="">Manual Key Access</h2>
+              <p data-splitting="">
+                Always have a backup option with the included physical keys for
+                emergencies.
+              </p>
+            </div>
+          </div>
+          <div class="card" tabindex="0">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/mobile-access-lp45.png?v=1744871765"
+              alt="A Beach view"
+            />
+            <div class="text">
+              <h2 data-splitting="">Mobile App Access</h2>
+              <p data-splitting="">
+                Unlock easily using the Lavna Smart Locks app with Bluetooth
+                connectivity.
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div id="strength">
+      <h1>LP45 – Where Strength Meets Innovation</h1>
+      <div class="strength-img">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/strength-lp45.png?v=1744871769"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <div id="battery">
+      <h1>LP45: SMART SECURITY WITH RECHARGEABLE CONVENIENCE</h1>
+      <div class="battery-img">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/battery-lp45.png?v=1744871769"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="battery-img-mobile">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/battery-img-mobile-view.png?v=1744871767"
+        alt=""
+      />
+    </div>
+
+    <div id="waterproof">
+      <h1>LP45 – Ready for Anything with IP67 Protection</h1>
+      <div class="water-img">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/waterproof-lp45.png?v=1744871769"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <div class="lp45-waterproof-mobile">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-waterproof-mobile.png?v=1744871765"
+        alt=""
+      />
+    </div>
+
+    <div id="applications">
+      <h1>LP45: Compact and Versatile</h1>
+      <div class="container">
+        <div class="images-container">
+          <div class="image1">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-app1.png?v=1744871766"
+              alt=""
+            />
+          </div>
+          <div class="image2">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-app2.png?v=1744871766"
+              alt=""
+            />
+          </div>
+          <div class="image3">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-app3.png?v=1744871767"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="dimensions">
+      <h1>LP45: The Right Fit with the Right Size</h1>
+      <div class="dimensions-img">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-dimensions.png?v=1744871768"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <div class="lp45-dimension-mobile">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-dimension-mobile.png?v=1744871765"
+        alt=""
+      />
+    </div>
+
+    <div id="parent-secs">
+      <div class="specs-container">
+        <!-- Headings -->
+        <h1>Dimensions &amp; Details That Make the Difference</h1>
+        <h2>Technical Specifications</h2>
+
+        <!-- Lock Specifications -->
+        <div class="lock-specs">
+          <h3>Lock Specifications</h3>
+          <div class="spec-details">
+            <!-- Column 1 -->
+            <div class="details-section">
+              <h4>Details</h4>
+              <ul class="details-list">
+                <li><strong>Item Type:</strong> Fingerprint Lock</li>
+                <li><strong>Temperature Range:</strong> 10°C to 45°C</li>
+                <li><strong>Battery Type:</strong> 2 × CR2032</li>
+                <li><strong>Waterproof Rating:</strong> IP67</li>
+              </ul>
+            </div>
+            <!-- Column 2 -->
+            <div class="details-section">
+              <h4></h4>
+              <ul class="details-list">
+                <li><strong>Bluetooth Range:</strong> 4 - 5 m</li>
+                <li><strong>Lock Body Surface:</strong> Black spray paint</li>
+                <li><strong>Unlocking Method:</strong> Fingerprint unlock</li>
+                <li>
+                  <strong>Lock Beam Material:</strong> 304 stainless steel
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Weight & Dimensions -->
+          <div class="weight-dimensions">
+            <div class="weight"><strong>Weight:</strong> 460 g</div>
+            <div class="dimensions">
+              <strong>Dimensions:</strong> 110 × 65 × 30 mm
+            </div>
+          </div>
+        </div>
+
+        <!-- Box Contains -->
+        <div class="box-container">
+          <h4>Box Contains</h4>
+          <ul class="box-list">
+            <li>Main Lock</li>
+            <li>Manual Key</li>
+            <li>Charging Cable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable container -->
+    <div class="testimonial-container" id="testimonialContainer">
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-rev?v=1744878766"
+            alt="User 1"
+          />
+          <span> Isha Infotech</span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “Lock is good. Battery take 1hr to full charge. Fingerprint
+          recognition is very fast. Looks sturdy and heavy. Not easy to cut for
+          thief. Official site selling same lock for 2800rs only. Lavna app is
+          available on play Store. Fingerprints are stored through app is very
+          simple. Bluetooth unlock work fine.”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-rev4.jpg?v=1744879279"
+            alt="User 1"
+          />
+          <span>Ravi Sharma</span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “Works seamlessly build quality is sturdy enough for main doors. First
+          the device needs to be configured in the app only then we can add
+          secured fingerprint.”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-rev2.jpg?v=1744879279"
+            alt="User 1"
+          />
+          <span> N SEENIVASAN</span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>“App and finger print sensor working great.”</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp45-rex3.jpg?v=1744879280"
+            alt="User 1"
+          />
+          <span> Malaika</span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “Amazing product! Super convenient and easy to use and very useful and
+          perfect size!”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+          src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp40-rev6.png?v=1744874751
+          alt="User 1" />
+          <span> Gaurav Goyal</span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “The company has the best customer care. They helped me to get the
+          lock setup very easily and also I liked the build quality and top
+          notch design of this lock.”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp40-rev4.png?v=1744874751"
+            alt="User 1"
+          />
+          <span>Sneha </span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “The fingerprint and app unlock features are super convenient. Setup
+          was easy, and it works perfectly. Highly recommend! ”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp40-rev3.png?v=1744874751"
+            alt="User 1"
+          />
+          <span>Purevana </span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “Discreet and works like a charm with multiple prints for multiple
+          people. ”
+        </p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="user-info">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0573/1182/1872/files/lp40-rev3.png?v=1744874751"
+            alt="User 1"
+          />
+          <span>KISHORE K </span>
+        </div>
+        <div class="stars">
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star filled">&#9733;</span>
+          <span class="star">&#9733;</span>
+        </div>
+
+        <p>
+          “The lock is very sturdy and quality is top notch. Value for money.
+          Make life more comfortable. No need of fear forgetting manual keys.
+          Customer Care is good and promptly responsive This is 2nd Lavna
+          product that I'm using. Strongly recommended. ”
+        </p>
+      </div>
+    </div>
+    <!-- Navigation Buttons BELOW -->
+    <div class="testimonial-buttons">
+      <button id="prev">&#8592;</button>
+      <button id="next">&#8594;</button>
+    </div>
+
+    <div id="parent-faq">
+      <div class="faq-container-001">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion-001">
+          <div class="faq-accordion-item-001">
+            <button id="faq-button-001" aria-expanded="false">
+              <span class="faq-title-001"
+                >How many fingerprints can the LP45 store?</span
+              >
+              <span class="faq-icon-001" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content-001">
+              <p>
+                The LP45 can store up to 20 fingerprints, allowing easy access
+                for multiple users.
+              </p>
+            </div>
+          </div>
+          <div class="faq-accordion-item-002">
+            <button id="faq-button-002" aria-expanded="false">
+              <span class="faq-title-002"
+                >What are the unlocking methods available on LP45?</span
+              >
+              <span class="faq-icon-002" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content-002">
+              <p>Fingerprint Mobile App (Lavna Smart Locks App) Manual Key</p>
+            </div>
+          </div>
+          <div class="faq-accordion-item-003">
+            <button id="faq-button-003" aria-expanded="false">
+              <span class="faq-title-003"
+                >How long does the battery last?
+              </span>
+              <span class="faq-icon-003" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content-003">
+              <p>
+                The built-in lithium battery lasts up to 4 months on a single
+                charge. You can recharge it with a Type-C cable.
+              </p>
+            </div>
+          </div>
+          <div class="faq-accordion-item-004">
+            <button id="faq-button-004" aria-expanded="false">
+              <span class="faq-title-004"
+                >What material is the LP45 made from?</span
+              >
+              <span class="faq-icon-004" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content-004">
+              <p>
+                It is built with zinc alloy, ABS, and 304 stainless steel, and
+                features a thicker lock hook for extra security.
+              </p>
+            </div>
+          </div>
+          <div class="faq-accordion-item-005">
+            <button id="faq-button-005" aria-expanded="false">
+              <span class="faq-title-005"> Does it work without internet?</span>
+              <span class="faq-icon-005" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content-005">
+              <p>
+                Yes, the LP45 connects via Bluetooth and doesn’t require
+                internet for unlocking.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+            // Ensure you have loaded the Splitting.js library before this script runs.
+            // For example, you can include it via CDN:
+
+            // Initialize Splitting for text animation
+            Splitting();
+
+            // Focus the first card after a delay
+            //   setTimeout(() => {
+            //     const firstCard = document.querySelector(".card");
+            //     if (firstCard) {
+            //       firstCard.focus();
+            //     }
+            //   }, 1500);
+
+            document.addEventListener("DOMContentLoaded", function () {
+              const container = document.getElementById("testimonialContainer");
+              const next = document.getElementById("next");
+              const prev = document.getElementById("prev");
+
+              next.addEventListener("click", () => {
+                container.scrollBy({ left: 400, behavior: "smooth" });
+              });
+
+              prev.addEventListener("click", () => {
+                container.scrollBy({ left: -400, behavior: "smooth" });
+              });
+
+              setInterval(() => {
+                container.scrollBy({ left: 400, behavior: "smooth" });
+              }, 4000);
+            });
+            function floatImagesOnScroll() {
+        const image1 = document.querySelector('.image1 img');
+        const image2 = document.querySelector('.image2 img');
+        const image3 = document.querySelector('.image3 img');
+
+        window.addEventListener('scroll', () => {
+          const scrollY = window.scrollY;
+
+          // Adjust float values individually for more variety
+          image1.style.transform = `translateY(${scrollY * 0.03}px)`;
+          image2.style.transform = `translateY(${-scrollY * 0.02}px)`;
+          image3.style.transform = `translateY(${scrollY * 0.03}px)`;
+        });
+      }
+       document.addEventListener('DOMContentLoaded', function () {
+          const heroBtn   = document.getElementById('custom-buy-now');
+          const variantID = {{ variant.id | default: '1234567890' }}; // replace default if needed
+          const qty       = 1;
+
+          function attachBuyNow() {
+            if (typeof onBuyNowClick === 'function') {
+              heroBtn.addEventListener('click', function (e) {
+                onBuyNowClick(e, false, [{ id: variantID, quantity: qty }]);
+              });
+            } else {
+              // try again in 200ms
+              console.warn('onBuyNowClick not ready, retrying…');
+              setTimeout(attachBuyNow, 200);
+            }
+          }
+
+          attachBuyNow();
+        });
+    </script>
+  </body>
+</html>
